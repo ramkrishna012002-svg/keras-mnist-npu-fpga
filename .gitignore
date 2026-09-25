@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+artifacts/*.keras
+artifacts/*.npy
+artifacts/*.json
+artifacts/*.mem
+artifacts/*.npz
