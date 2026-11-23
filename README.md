@@ -48,3 +48,29 @@ The full 784-wide network is scheduled over many cycles; the RTL includes the
 arithmetic core and a correctness-first top-level control reference.
 
 See docs/ARCHITECTURE.md for the mapping and cycle model.
+
+
+## CNN NPU development (new path)
+
+A compact CNN implementation is being developed alongside the original MLP
+reference. The two paths are kept separate so the existing MLP project is not
+overwritten.
+
+CNN topology:
+28x28x1 -> Conv(8, 3x3, ReLU) -> MaxPool(2x2) ->
+Conv(16, 3x3, ReLU) -> MaxPool(2x2) -> Flatten(400) -> Dense(10) -> Argmax.
+
+Train and evaluate the CNN:
+```bash
+python cnn/train_mnist.py
+python cnn/evaluate_mnist.py
+python cnn/export_weights.py
+```
+
+CNN architecture and tensor shapes are documented in
+[docs/CNN_ARCHITECTURE.md](docs/CNN_ARCHITECTURE.md).
+
+Initial CNN RTL arithmetic blocks are `rtl/conv_mac.v`,
+`rtl/relu_int8.v`, and `rtl/maxpool2x2.v`. These are building blocks only;
+the complete line-buffer, controller, requantization, BRAM loading, and
+end-to-end RTL/Python verification are still future implementation stages.
